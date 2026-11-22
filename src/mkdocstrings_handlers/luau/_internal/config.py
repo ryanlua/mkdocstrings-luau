@@ -52,12 +52,12 @@ try:
     from pydantic import Field as BaseField
     from pydantic.dataclasses import dataclass
 
-    _base_url = "https://mkdocstrings.github.io/mkdocstrings-luau/usage"
+    _base_url = "https://ryanlua.github.io/mkdocstrings-luau/usage"
 
     def _Field(  # noqa: N802
         *args: Any,
         description: str,
-        group: Literal["general"] | None = None,
+        group: Literal["general", "headings", "members"] | None = None,
         parent: str | None = None,
         **kwargs: Any,
     ) -> None:
@@ -73,7 +73,7 @@ try:
             **kwargs,
         )
 except ImportError:
-    from dataclasses import dataclass
+    from dataclasses import dataclass  # type: ignore[no-redef]
 
     def _Field(*args: Any, **kwargs: Any) -> None:  # type: ignore[misc]  # noqa: N802
         pass
@@ -91,7 +91,7 @@ if sys.version_info >= (3, 10):
 
 # The input config class is useful to generate a JSON schema, see scripts/mkdocs_hooks.py.
 # YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)
+@dataclass(**_dataclass_options)  # type: ignore[call-overload]
 class LuauInputOptions:
     """Accepted input options."""
 
@@ -143,9 +143,190 @@ class LuauInputOptions:
         ),
     ] = ""
 
+    show_root_heading: Annotated[
+        bool,
+        _Field(
+            group="headings",
+            description="Show a heading for the object documented by a `:::` directive.",
+        ),
+    ] = True
+
+    show_root_toc_entry: Annotated[
+        bool,
+        _Field(
+            group="headings",
+            description="Add the root object to the table of contents when its heading is hidden.",
+        ),
+    ] = True
+
+    show_root_full_path: Annotated[
+        bool,
+        _Field(
+            group="headings",
+            description="Show the full identifier in the root heading.",
+        ),
+    ] = False
+
+    show_root_members_full_path: Annotated[
+        bool,
+        _Field(
+            group="headings",
+            description="Show full identifiers for members of the root object.",
+        ),
+    ] = False
+
+    show_object_full_path: Annotated[
+        bool,
+        _Field(
+            group="headings",
+            description="Show full identifiers for nested objects.",
+        ),
+    ] = False
+
+    show_source: Annotated[
+        bool,
+        _Field(
+            group="general",
+            description="Show the source location, and the declaration when the file can be read.",
+        ),
+    ] = True
+
+    show_signature: Annotated[
+        bool,
+        _Field(
+            group="general",
+            description="Show Luau signatures for functions, properties, and types.",
+        ),
+    ] = True
+
+    separate_signature: Annotated[
+        bool,
+        _Field(
+            group="general",
+            description="Render the signature below the heading instead of inside it.",
+        ),
+    ] = False
+
+    signature_crossrefs: Annotated[
+        bool,
+        _Field(
+            group="general",
+            description="Link known types, including property types and `@external` names such as builtins.",
+        ),
+    ] = True
+
+    show_labels: Annotated[
+        bool,
+        _Field(
+            group="general",
+            description="Show labels such as deprecated, private, yields, and custom tags.",
+        ),
+    ] = True
+
+    show_category_heading: Annotated[
+        bool,
+        _Field(
+            group="members",
+            description="Show headings for Properties, Events, Types, Functions, and Methods.",
+        ),
+    ] = True
+
+    summary: Annotated[
+        bool,
+        _Field(
+            group="members",
+            description="Show a summary table of members before their full documentation.",
+        ),
+    ] = True
+
+    show_private: Annotated[
+        bool,
+        _Field(
+            group="members",
+            description="Include members marked `@private` when rendering a class.",
+        ),
+    ] = False
+
+    show_unreleased: Annotated[
+        bool,
+        _Field(
+            group="members",
+            description="Include members marked `@unreleased` when rendering a class.",
+        ),
+    ] = False
+
+    show_ignored: Annotated[
+        bool,
+        _Field(
+            group="members",
+            description="Include members marked `@ignore` when rendering a class.",
+        ),
+    ] = False
+
+    members: Annotated[
+        list[str] | None,
+        _Field(
+            group="members",
+            description="Names of members to render. `true` or null renders all visible members. `false` renders none.",
+        ),
+    ] = None
+
+    filters: Annotated[
+        list[str],
+        _Field(
+            group="members",
+            description="Regular expressions selecting member names. Prefix a pattern with `!` to exclude matches.",
+        ),
+    ] = field(default_factory=list)
+
+    event_types: Annotated[
+        list[str],
+        _Field(
+            group="members",
+            description=(
+                "Property types rendered in an Events section. "
+                "A custom `@tag event` is always an event. An empty list disables this type match."
+            ),
+        ),
+    ] = field(default_factory=lambda: ["BindableEvent", "RBXScriptSignal", "Signal"])
+
+    members_order: Annotated[
+        Literal["alphabetical", "source"],
+        _Field(
+            group="members",
+            description="Order members alphabetically or by source location.",
+        ),
+    ] = "source"
+
+    docstring_section_style: Annotated[
+        Literal["table", "list"],
+        _Field(
+            group="general",
+            description="Render parameters, returns, errors, and fields as a table or a list.",
+        ),
+    ] = "table"
+
     @classmethod
     def coerce(cls, **data: Any) -> MutableMapping[str, Any]:
         """Coerce data."""
+        if "members" in data:
+            members = data["members"]
+            if members is True or members is None:
+                data["members"] = None
+            elif members is False:
+                data["members"] = []
+            elif isinstance(members, str):
+                data["members"] = [members]
+        if "filters" in data and isinstance(data["filters"], str):
+            data["filters"] = [data["filters"]]
+        if "event_types" in data and isinstance(data["event_types"], str):
+            data["event_types"] = [data["event_types"]]
+        order = data.get("members_order", "source")
+        if order not in {"alphabetical", "source"}:
+            raise ValueError(f"members_order must be 'alphabetical' or 'source', not {order!r}")
+        style = data.get("docstring_section_style", "table")
+        if style not in {"table", "list"}:
+            raise ValueError(f"docstring_section_style must be 'table' or 'list', not {style!r}")
         return data
 
     @classmethod
@@ -155,7 +336,7 @@ class LuauInputOptions:
 
 
 # YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)
+@dataclass(**_dataclass_options)  # type: ignore[call-overload]
 class LuauOptions(LuauInputOptions):  # type: ignore[override,unused-ignore]
     """Final options passed as template context."""
 
@@ -168,11 +349,51 @@ class LuauOptions(LuauInputOptions):  # type: ignore[override,unused-ignore]
         return super().coerce(**data)
 
 
+# YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
+@dataclass(**_dataclass_options)  # type: ignore[call-overload]
+class _Inventory:
+    """One remote objects inventory."""
+
+    url: str
+    """Inventory URL."""
+
+    base_url: str | None = None
+    """Base URL joined with each inventory URI. Defaults to the inventory URL's directory."""
+
+    domains: list[str] = field(default_factory=lambda: ["luau"])
+    """Sphinx domains to keep. Defaults to `luau`."""
+
+
 # The input config class is useful to generate a JSON schema, see scripts/mkdocs_hooks.py.
 # YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)
+@dataclass(**_dataclass_options)  # type: ignore[call-overload]
 class LuauInputConfig:
     """Luau handler configuration."""
+
+    extractor: Annotated[
+        str,
+        _Field(description="Path or name of the `moonwave-extractor` executable."),
+    ] = "moonwave-extractor"
+
+    paths: Annotated[
+        list[str],
+        _Field(description="Luau files or directories passed to `moonwave-extractor extract`."),
+    ] = field(default_factory=list)
+
+    json: Annotated[
+        str,
+        _Field(description="Path to pre-generated Moonwave JSON. When set, the extractor is not run."),
+    ] = ""
+
+    base: Annotated[
+        str,
+        _Field(description="`--base` directory for the extractor. Source paths in the JSON are relative to it."),
+    ] = ""
+
+    inventories: Annotated[
+        list[str | _Inventory],
+        _Field(description="Sphinx object inventories to download for cross-references."),
+    ] = field(default_factory=list)
 
     # We want to validate options early, so we load them as `LuauInputOptions`.
     options: Annotated[
@@ -192,9 +413,12 @@ class LuauInputConfig:
 
 
 # YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)
+@dataclass(**_dataclass_options)  # type: ignore[call-overload]
 class LuauConfig(LuauInputConfig):  # type: ignore[override,unused-ignore]
     """Luau handler configuration."""
+
+    inventories: list[_Inventory] = field(default_factory=list)  # type: ignore[assignment]
+    """Object inventories to load."""
 
     # We want to keep a simple dictionary in order to later merge global and local options.
     options: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
@@ -203,4 +427,14 @@ class LuauConfig(LuauInputConfig):  # type: ignore[override,unused-ignore]
     @classmethod
     def coerce(cls, **data: Any) -> MutableMapping[str, Any]:
         """Coerce data."""
+        if "inventories" in data:
+            inventories = []
+            for item in data["inventories"]:
+                if isinstance(item, str):
+                    inventories.append(_Inventory(url=item))
+                elif isinstance(item, _Inventory):
+                    inventories.append(item)
+                else:
+                    inventories.append(_Inventory(**item))
+            data["inventories"] = inventories
         return super().coerce(**data)

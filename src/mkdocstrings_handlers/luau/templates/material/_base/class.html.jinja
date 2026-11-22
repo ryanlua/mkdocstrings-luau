@@ -1,0 +1,70 @@
+{#- A Luau class documented by Moonwave.
+
+Context:
+  class: Class object.
+  members: Visible members grouped by kind.
+  root (bool): Whether this is the `:::` target.
+  heading_level (int): HTML heading level.
+  config: Rendering options.
+-#}
+{% block logs scoped %}
+  {{ log.debug("Rendering " + class.path) }}
+{% endblock logs %}
+
+<div class="doc doc-object doc-class">
+  {% with obj = class, html_id = class.path, symbol = "class" %}
+    {% if root %}
+      {% set show_full_path = config.show_root_full_path %}
+      {% set root_members = true %}
+    {% elif root_members %}
+      {% set show_full_path = config.show_root_members_full_path or config.show_object_full_path %}
+      {% set root_members = false %}
+    {% else %}
+      {% set show_full_path = config.show_object_full_path %}
+    {% endif %}
+    {% set display_name = class.path if show_full_path else class.name %}
+
+    {% if not root or config.show_root_heading %}
+      {% filter heading(
+          heading_level,
+          role="class",
+          id=html_id,
+          class="doc doc-heading",
+          toc_label=(('<code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;')|safe if config.show_symbol_type_toc else '') ~ (config.toc_label if config.toc_label and root else class.name),
+        ) %}
+        {% if config.show_symbol_type_heading %}<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>{% endif %}
+        {% if config.heading and root %}
+          {{ config.heading }}
+        {% else %}
+          <span class="doc doc-object-name doc-class-name">{% filter highlight(language="luau", inline=True) %}{{ display_name }}{% endfilter %}</span>
+        {% endif %}
+        {% with labels = class.labels %}
+          {% include "labels.html.jinja" with context %}
+        {% endwith %}
+      {% endfilter %}
+    {% else %}
+      {% if config.show_root_toc_entry %}
+        {% filter heading(
+            heading_level,
+            role="class",
+            id=html_id,
+            hidden=True,
+            toc_label=(('<code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;')|safe if config.show_symbol_type_toc else '') ~ (config.toc_label if config.toc_label and root else class.name),
+          ) %}
+        {% endfilter %}
+      {% endif %}
+      {% set heading_level = heading_level - 1 %}
+    {% endif %}
+
+    <div class="doc doc-contents {% if root %}first{% endif %}">
+      {% block contents scoped %}
+        {% include "deprecated.html.jinja" with context %}
+        {% include "description.html.jinja" with context %}
+        {% include "summary.html.jinja" with context %}
+        {% include "source.html.jinja" with context %}
+        {% set heading_level = heading_level + 1 %}
+        {% include "children.html.jinja" with context %}
+      {% endblock contents %}
+    </div>
+  {% endwith %}
+</div>

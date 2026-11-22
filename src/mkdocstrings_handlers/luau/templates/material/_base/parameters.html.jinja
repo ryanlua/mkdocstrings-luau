@@ -1,0 +1,58 @@
+{#- Parameters of a function.
+
+Context:
+  function: Function or method.
+  config: Rendering options.
+  heading_level (int)
+  html_id (str)
+-#}
+{% if function.parameters %}
+  <p><span class="doc-section-title">Parameters:</span></p>
+  {% if config.docstring_section_style == "list" %}
+    <ul>
+      {% for parameter in function.parameters %}
+        <li class="doc-section-item">
+          <b><code>{{ parameter.display_name }}{% if parameter.optional %}?{% endif %}</code></b>
+          {% if parameter.lua_type %}
+            (<code>{% if config.signature_crossrefs %}{{ parameter.lua_type|lua_type(function.external_types) }}{% else %}{{ parameter.lua_type }}{% endif %}</code>)
+          {% endif %}
+          {% if parameter.description %}
+            –
+            <div class="doc doc-md-description">
+              {{ parameter.description|moonwave_markdown(heading_level, html_id) }}
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for parameter in function.parameters %}
+          <tr class="doc-section-item">
+            <td><code>{{ parameter.display_name }}{% if parameter.optional %}?{% endif %}</code></td>
+            <td>
+              {% if parameter.lua_type %}
+                <code>{% if config.signature_crossrefs %}{{ parameter.lua_type|lua_type(function.external_types) }}{% else %}{{ parameter.lua_type }}{% endif %}</code>
+              {% endif %}
+            </td>
+            <td>
+              {% if parameter.description %}
+                <div class="doc doc-md-description">
+                  {{ parameter.description|moonwave_markdown(heading_level, html_id) }}
+                </div>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endif %}

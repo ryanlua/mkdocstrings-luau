@@ -1,0 +1,58 @@
+{#- Fields of an interface.
+
+Context:
+  typedef: Type or interface.
+  config: Rendering options.
+  heading_level (int)
+  html_id (str)
+-#}
+{% if typedef.fields %}
+  <p><span class="doc-section-title">Fields:</span></p>
+  {% if config.docstring_section_style == "list" %}
+    <ul>
+      {% for field in typedef.fields %}
+        <li class="doc-section-item">
+          <b><code>{{ field.name }}</code></b>
+          {% if field.lua_type %}
+            (<code>{% if config.signature_crossrefs %}{{ field.lua_type|lua_type(typedef.external_types) }}{% else %}{{ field.lua_type }}{% endif %}</code>)
+          {% endif %}
+          {% if field.description %}
+            –
+            <div class="doc doc-md-description">
+              {{ field.description|moonwave_markdown(heading_level, html_id) }}
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for field in typedef.fields %}
+          <tr class="doc-section-item">
+            <td><code>{{ field.name }}</code></td>
+            <td>
+              {% if field.lua_type %}
+                <code>{% if config.signature_crossrefs %}{{ field.lua_type|lua_type(typedef.external_types) }}{% else %}{{ field.lua_type }}{% endif %}</code>
+              {% endif %}
+            </td>
+            <td>
+              {% if field.description %}
+                <div class="doc doc-md-description">
+                  {{ field.description|moonwave_markdown(heading_level, html_id) }}
+                </div>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endif %}

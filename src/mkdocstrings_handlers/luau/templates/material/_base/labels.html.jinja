@@ -1,0 +1,13 @@
+{#- Labels such as deprecated, yields, and custom tags.
+
+Context:
+  labels (list[str]): Label texts.
+  config: Rendering options.
+-#}
+{% if config.show_labels and labels %}
+  <span class="doc doc-labels">
+    {% for label in labels %}
+      <small class="doc doc-label doc-label-{{ label|replace(' ', '-') }}"><code>{{ label }}</code></small>
+    {% endfor %}
+  </span>
+{% endif %}

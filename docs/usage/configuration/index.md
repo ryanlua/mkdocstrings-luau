@@ -27,6 +27,8 @@ These options affect how the documentation is collected from sources and rendere
 See the following tables summarizing the options, and get more details for each option
 in the following pages:
 
-- [General options](general.md): various options that do not fit in the other categories
+- [Sources](sources.md): where Moonwave JSON comes from, and remote inventories
+- [General options](general.md): signatures, labels, source, and section style
 - [Headings options](headings.md): options related to headings and the table of contents
     (or sidebar, depending on the theme used)
+- [Members options](members.md): which class members are rendered, and in what order

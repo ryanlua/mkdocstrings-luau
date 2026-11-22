@@ -211,3 +211,38 @@ NOTE: **Use with/without `heading`.** If you use this option without specifying 
       heading: "My fancy module"
       toc_label: "My fancy module"
 ```
+
+[](){ #option-show_root_heading }
+## `show_root_heading`
+
+- **:octicons-package-24: Type [`bool`][] :material-equal: `True`{ title="default value" }**
+
+Show a heading for the object named by `:::`. Set it to `false` when the page title already names that object. The anchor is still emitted when [`show_root_toc_entry`][option-show_root_toc_entry] is true.
+
+[](){ #option-show_root_toc_entry }
+## `show_root_toc_entry`
+
+- **:octicons-package-24: Type [`bool`][] :material-equal: `True`{ title="default value" }**
+
+When the root heading is hidden, still add the object to the table of contents and register its anchor.
+
+[](){ #option-show_root_full_path }
+## `show_root_full_path`
+
+- **:octicons-package-24: Type [`bool`][] :material-equal: `False`{ title="default value" }**
+
+Show the full identifier (`Vector3.dot`) in the root heading instead of the short name.
+
+[](){ #option-show_root_members_full_path }
+## `show_root_members_full_path`
+
+- **:octicons-package-24: Type [`bool`][] :material-equal: `False`{ title="default value" }**
+
+Show full identifiers for members rendered under the root object.
+
+[](){ #option-show_object_full_path }
+## `show_object_full_path`
+
+- **:octicons-package-24: Type [`bool`][] :material-equal: `False`{ title="default value" }**
+
+Show full identifiers for nested objects. Also applies to root members when [`show_root_members_full_path`][option-show_root_members_full_path] is false.

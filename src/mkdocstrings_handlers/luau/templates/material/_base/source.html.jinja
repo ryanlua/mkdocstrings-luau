@@ -1,0 +1,15 @@
+{#- Source location and, when the file is readable, the declaration.
+
+Context:
+  obj: Documented object.
+  config: Rendering options.
+  html_id (str)
+-#}
+{% if config.show_source and obj.source %}
+  <details class="mkdocstrings-source">
+    <summary>Source in <code>{{ obj.source.label }}</code></summary>
+    {% if obj.source.text %}
+      {{ obj.source.text|highlight(language="luau", linestart=obj.source.display_line, linenums=True, id_prefix=html_id ~ "--source--") }}
+    {% endif %}
+  </details>
+{% endif %}

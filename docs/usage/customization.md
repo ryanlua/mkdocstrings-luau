@@ -35,15 +35,15 @@ by overriding the values of our CSS variables, for example:
 
 ```css title="docs/css/mkdocstrings.css"
 [data-md-color-scheme="default"] {
-  --doc-symbol-data-fg-color: #d1b619;
+  --doc-symbol-class-fg-color: #d1b619;
 
-  --doc-symbol-data-bg-color: #d1b6191a;
+  --doc-symbol-class-bg-color: #d1b6191a;
 }
 
 [data-md-color-scheme="slate"] {
-  --doc-symbol-data-fg-color: #46c2cb;
+  --doc-symbol-class-fg-color: #46c2cb;
 
-  --doc-symbol-data-bg-color: #46c2cb1a;
+  --doc-symbol-class-bg-color: #46c2cb1a;
 }
 ```
 
@@ -54,9 +54,9 @@ otherwise just override the variables at root level:
 
 ```css title="docs/css/mkdocstrings.css"
 :root {
-  --doc-symbol-data-fg-color: #d1b619;
+  --doc-symbol-class-fg-color: #d1b619;
 
-  --doc-symbol-data-bg-color: #d1b6191a;
+  --doc-symbol-class-bg-color: #d1b6191a;
 }
 ```
 
@@ -66,20 +66,20 @@ otherwise just override the variables at root level:
 <div id="preview-symbol-colors">
   <style>
     [data-md-color-scheme="default"] #preview-symbol-colors {
-      --doc-symbol-data-fg-color: #d1b619;
+      --doc-symbol-class-fg-color: #d1b619;
 
-      --doc-symbol-data-bg-color: #d1b6191a;
+      --doc-symbol-class-bg-color: #d1b6191a;
     }
 
     [data-md-color-scheme="slate"] #preview-symbol-colors {
-      --doc-symbol-data-fg-color: #46c2cb;
+      --doc-symbol-class-fg-color: #46c2cb;
 
-      --doc-symbol-data-bg-color: #46c2cb1a;
+      --doc-symbol-class-bg-color: #46c2cb1a;
     }
   </style>
   <p>
     Try cycling through the themes to see the colors for each theme:
-    <code class="doc-symbol doc-symbol-data"></code
+    <code class="doc-symbol doc-symbol-class"></code
   </p>
 </div>
 
@@ -91,8 +91,8 @@ You can also change the actual symbol names.
 For example, to use single letters instead of truncated types:
 
 ```css title="docs/css/mkdocstrings.css"
-.doc-symbol-data::after {
-  content: "D";
+.doc-symbol-class::after {
+  content: "C";
 }
 ```
 
@@ -101,12 +101,12 @@ For example, to use single letters instead of truncated types:
 
 <div id="preview-symbol-names">
   <style>
-    #preview-symbol-names .doc-symbol-data::after {
-      content: "D";
+    #preview-symbol-names .doc-symbol-class::after {
+      content: "C";
     }
   </style>
   <ul>
-    <li>Data: <code class="doc-symbol doc-symbol-data"></code></li>
+    <li>Class: <code class="doc-symbol doc-symbol-class"></code></li>
   </ul>
 </div>
 
@@ -134,16 +134,16 @@ See the general *mkdocstrings* documentation to learn how to override them: http
 
 Each one of these templates extends a base version in `theme/_base`. Example:
 
-```html+jinja title="theme/data.html.jinja"
-{% extends "_base/data.html.jinja" %}
+```html+jinja title="theme/class.html.jinja"
+{% extends "_base/class.html.jinja" %}
 ```
 
 Some of these templates define [Jinja blocks](https://jinja.palletsprojects.com/en/3.0.x/templates/#template-inheritance).
 allowing to customize only *parts* of a template
 without having to fully copy-paste it into your project:
 
-```jinja title="templates/theme/data.html"
-{% extends "_base/data.html" %}
+```jinja title="templates/theme/class.html.jinja"
+{% extends "_base/class.html.jinja" %}
 {% block contents scoped %}
   {{ block.super }}
   Additional contents
