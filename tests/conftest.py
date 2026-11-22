@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -33,12 +32,12 @@ def fixture_mkdocs_conf(request: pytest.FixtureRequest, tmp_path: Path) -> Itera
         request = request._parent_request
 
     project = Path(__file__).parent.parent
-    _write_fixture(tmp_path)
+    example_json = project / "docs" / "examples" / "api.json"
     conf = MkDocsConfig(config_file_path=str(project / "mkdocs.yml"))
     conf_dict: dict[str, Any] = {
         "site_name": "foo",
         "site_url": "https://example.org/",
-        "site_dir": str(tmp_path / "site"),
+        "site_dir": str(tmp_path),
         "docs_dir": str(project / "docs"),
         "theme": "material",
         "plugins": [
@@ -46,7 +45,7 @@ def fixture_mkdocs_conf(request: pytest.FixtureRequest, tmp_path: Path) -> Itera
             {
                 "mkdocstrings": {
                     "default_handler": "luau",
-                    "handlers": {"luau": {"json": str(tmp_path / "api.json"), "base": str(tmp_path)}},
+                    "handlers": {"luau": {"json": str(example_json)}},
                 },
             },
         ],
@@ -107,73 +106,3 @@ def fixture_handler(plugin: MkdocstringsPlugin, ext_markdown: Markdown) -> LuauH
     handler = plugin.handlers.get_handler("luau")
     handler._update_env(ext_markdown, config=plugin.handlers._tool_config)
     return handler
-
-
-def _write_fixture(tmp_path: Path) -> None:
-    """Write the Moonwave JSON and source file the handler tests load."""
-    source = tmp_path / "src"
-    source.mkdir()
-    lines = [
-        "-- box",
-        "local function open()",
-        "\treturn",
-        "end",
-        'Box.Changed = Create("BindableEvent")({',
-        '\tName = "Changed",',
-        "})",
-        "Box.open = open",
-        "Box.Flag = false",
-    ]
-    (source / "init.luau").write_text("\n".join(lines) + "\n", encoding="utf-8")
-    payload = [
-        {
-            "name": "Box",
-            "desc": "A box. Open it with [Box.open].",
-            "external_types": [
-                {"name": "BindableEvent", "url": "https://example.com/BindableEvent"},
-                {"name": "boolean", "url": "https://example.com/boolean"},
-            ],
-            "source": {"line": 1, "path": "src/init.luau"},
-            "functions": [
-                {
-                    "name": "open",
-                    "desc": "Opens the box.",
-                    "function_type": "static",
-                    "params": [{"name": "x", "desc": "Width", "lua_type": "number"}],
-                    "returns": [{"lua_type": "()", "desc": ""}],
-                    "source": {"line": lines.index("Box.open = open") + 1, "path": "src/init.luau"},
-                },
-                {
-                    "name": "measure",
-                    "desc": "Measures the box.",
-                    "function_type": "method",
-                    "params": [],
-                    "returns": [{"lua_type": "number", "desc": "The size"}],
-                    "source": {"line": 1, "path": "src/init.luau"},
-                },
-            ],
-            "properties": [
-                {
-                    "name": "Flag",
-                    "desc": "Whether it is open.",
-                    "lua_type": "boolean",
-                    "source": {"line": lines.index("Box.Flag = false") + 1, "path": "src/init.luau"},
-                },
-                {
-                    "name": "Changed",
-                    "desc": "Fires when it opens.",
-                    "lua_type": "BindableEvent",
-                    "source": {"line": lines.index('Box.Changed = Create("BindableEvent")({') + 1, "path": "src/init.luau"},
-                },
-            ],
-            "types": [
-                {
-                    "name": "Kind",
-                    "desc": "A kind of box.",
-                    "lua_type": "string",
-                    "source": {"line": 1, "path": "src/init.luau"},
-                },
-            ],
-        },
-    ]
-    (tmp_path / "api.json").write_text(json.dumps(payload), encoding="utf-8")

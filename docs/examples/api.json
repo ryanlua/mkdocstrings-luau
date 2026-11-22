@@ -1,0 +1,228 @@
+[
+  {
+    "functions": [
+      {
+        "name": "greet",
+        "desc": "Greet someone by name.",
+        "params": [
+          {
+            "name": "name",
+            "desc": "Who to greet",
+            "lua_type": "string"
+          }
+        ],
+        "returns": [
+          {
+            "desc": "Resolves to the greeting",
+            "lua_type": "Promise"
+          }
+        ],
+        "function_type": "static",
+        "external_types": [
+          {
+            "name": "Promise",
+            "url": "https://eryn.io/roblox-lua-promise/api/Promise"
+          }
+        ],
+        "errors": [
+          {
+            "lua_type": "\"empty name\"",
+            "desc": "The name was blank"
+          }
+        ],
+        "source": {
+          "line": 16,
+          "path": "docs/examples/src/Greeter.luau"
+        }
+      }
+    ],
+    "properties": [],
+    "types": [],
+    "name": "Greeter",
+    "desc": "Builds greetings. Asynchronous results use [Promise].",
+    "source": {
+      "line": 6,
+      "path": "docs/examples/src/Greeter.luau"
+    }
+  },
+  {
+    "functions": [
+      {
+        "name": "new",
+        "desc": "Create a vector from components.",
+        "params": [
+          {
+            "name": "x",
+            "desc": "X component",
+            "lua_type": "number"
+          },
+          {
+            "name": "y",
+            "desc": "Y component",
+            "lua_type": "number"
+          },
+          {
+            "name": "z?",
+            "desc": "Optional Z, defaults to 0",
+            "lua_type": "number"
+          }
+        ],
+        "returns": [
+          {
+            "desc": "The new vector",
+            "lua_type": "Vector3"
+          }
+        ],
+        "function_type": "static",
+        "errors": [
+          {
+            "lua_type": "\"invalid component\"",
+            "desc": "A component was not a number"
+          }
+        ],
+        "source": {
+          "line": 49,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      },
+      {
+        "name": "dot",
+        "desc": "Dot product with another vector.\n\nSee [Vector3.new] for construction.",
+        "params": [
+          {
+            "name": "other",
+            "desc": "The other vector",
+            "lua_type": "Vector3"
+          }
+        ],
+        "returns": [
+          {
+            "desc": "The dot product",
+            "lua_type": "number"
+          }
+        ],
+        "function_type": "method",
+        "realm": [
+          "Client",
+          "Server"
+        ],
+        "yields": true,
+        "source": {
+          "line": 72,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      },
+      {
+        "name": "magnitude",
+        "desc": "Length of the vector.",
+        "params": [],
+        "returns": [
+          {
+            "desc": "The magnitude",
+            "lua_type": "number"
+          }
+        ],
+        "function_type": "method",
+        "deprecated": {
+          "version": "v2.0.0",
+          "desc": "Use a dedicated length helper instead."
+        },
+        "source": {
+          "line": 82,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      },
+      {
+        "name": "_secret",
+        "desc": "Internal helper excluded from the public docs.",
+        "params": [],
+        "returns": [
+          {
+            "desc": "",
+            "lua_type": "nil\n"
+          }
+        ],
+        "function_type": "method",
+        "ignore": true,
+        "source": {
+          "line": 91,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      }
+    ],
+    "properties": [
+      {
+        "name": "X",
+        "desc": "The X component.",
+        "lua_type": "number",
+        "readonly": true,
+        "source": {
+          "line": 20,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      },
+      {
+        "name": "Y",
+        "desc": "The Y component. Hidden unless private members are shown.",
+        "lua_type": "number",
+        "private": true,
+        "source": {
+          "line": 29,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      },
+      {
+        "name": "W",
+        "desc": "Homogeneous coordinate. Not part of the stable API yet.",
+        "lua_type": "number",
+        "unreleased": true,
+        "source": {
+          "line": 38,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      }
+    ],
+    "types": [
+      {
+        "name": "UnitVector",
+        "desc": "A vector constrained to unit length.",
+        "lua_type": "{ number }",
+        "source": {
+          "line": 101,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      },
+      {
+        "name": "Options",
+        "desc": "Options accepted by constructors.",
+        "fields": [
+          {
+            "name": "Scale",
+            "lua_type": "number",
+            "desc": "Uniform scale applied after creation"
+          },
+          {
+            "name": "Unit",
+            "lua_type": "boolean",
+            "desc": "Return a [UnitVector] instead"
+          }
+        ],
+        "since": "v1.1.0",
+        "source": {
+          "line": 112,
+          "path": "docs/examples/src/Vector3.luau"
+        }
+      }
+    ],
+    "name": "Vector3",
+    "desc": "A three-component vector.\n\nCreate one with [Vector3.new]. Scale it through [Options].",
+    "tags": [
+      "math"
+    ],
+    "since": "v1.0.0",
+    "source": {
+      "line": 10,
+      "path": "docs/examples/src/Vector3.luau"
+    }
+  }
+]

@@ -87,7 +87,7 @@ In a Markdown page, with `handler: luau` selected globally or on the directive:
 
 `Class.member` is the canonical identifier. Methods can also be written `Class:method`. `[Vector3.new]` inside a Moonwave description becomes a cross-reference when that object is rendered. `@external Promise https://...` links that type name to the URL.
 
-See the [configuration reference](configuration/index.md) for every option.
+See the [example](../examples/index.md) rendered from a small library, and the [configuration reference](configuration/index.md) for every option.
 
 ## Not handled yet
 
