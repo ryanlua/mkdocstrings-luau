@@ -6,18 +6,18 @@
 	"image": "mcr.microsoft.com/devcontainers/python:3-3.14-trixie",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
-	"features": {
-		"ghcr.io/devcontainers-extra/features/black:2": {},
-		"ghcr.io/devcontainers-extra/features/mkdocs:2": {},
-		"ghcr.io/devcontainers-extra/features/mypy:2": {},
-		"ghcr.io/devcontainers-extra/features/uv:1": {}
-	},
+	// "features": {},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [8000],
+	"portsAttributes": {
+		"8000": {
+			"label": "MkDocs"
+		}
+	},
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+	"postCreateCommand": "make setup",
 
 	// Configure tool-specific properties.
 	"customizations": {
