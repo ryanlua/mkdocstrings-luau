@@ -23,8 +23,10 @@ nav:
   - usage/index.md
   - Configuration:
     - usage/configuration/index.md
+    - Sources: usage/configuration/sources.md
     - General: usage/configuration/general.md
     - Headings: usage/configuration/headings.md
+    - Members: usage/configuration/members.md
   - Customization: usage/customization.md
 - API reference: reference/api.md
 - Development:

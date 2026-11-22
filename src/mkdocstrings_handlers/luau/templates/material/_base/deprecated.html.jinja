@@ -1,0 +1,19 @@
+{#- Deprecation notice.
+
+Context:
+  obj: Documented object.
+  heading_level (int)
+  html_id (str)
+-#}
+{% if obj.deprecated %}
+  <div class="admonition warning">
+    <p class="admonition-title">Deprecated{% if obj.deprecated.version %} in {{ obj.deprecated.version }}{% endif %}</p>
+    {% if obj.deprecated.description %}
+      <div class="doc doc-md-description">
+        {{ obj.deprecated.description|moonwave_markdown(heading_level, html_id) }}
+      </div>
+    {% else %}
+      <p>This API is deprecated.</p>
+    {% endif %}
+  </div>
+{% endif %}

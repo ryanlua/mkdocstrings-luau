@@ -1,0 +1,37 @@
+{#- One-line summary of a class's visible members.
+
+Context:
+  members: Grouped members (methods, functions, properties, types).
+  config: Rendering options.
+  heading_level (int)
+-#}
+{% if config.summary %}
+  {% set rows = members.properties + members.events + members.types + members.functions + members.methods %}
+  {% if rows %}
+    <p><span class="doc-section-title">Summary</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Kind</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in rows %}
+          <tr class="doc-section-item">
+            <td><a href="#{{ item.path }}"><code>{{ item.name }}</code></a></td>
+            <td><code>{{ item.kind }}</code></td>
+            <td>
+              {% if item.description %}
+                <div class="doc doc-md-description">
+                  {{ item.description.split("\n")[0]|moonwave_markdown(heading_level, item.path) }}
+                </div>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endif %}

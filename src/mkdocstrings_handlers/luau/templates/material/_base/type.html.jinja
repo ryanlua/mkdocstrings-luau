@@ -1,0 +1,72 @@
+{#- A Luau type alias or interface.
+
+Context:
+  typedef: Type object.
+  root (bool)
+  root_members (bool)
+  heading_level (int)
+  config: Rendering options.
+-#}
+{% block logs scoped %}
+  {{ log.debug("Rendering " + typedef.path) }}
+{% endblock logs %}
+
+<div class="doc doc-object doc-type-alias">
+  {% with obj = typedef, html_id = typedef.path %}
+    {% if root %}
+      {% set show_full_path = config.show_root_full_path %}
+      {% set root_members = true %}
+    {% elif root_members %}
+      {% set show_full_path = config.show_root_members_full_path or config.show_object_full_path %}
+    {% else %}
+      {% set show_full_path = config.show_object_full_path %}
+    {% endif %}
+    {% set display_name = typedef.path if show_full_path else typedef.name %}
+
+    {% if not root or config.show_root_heading %}
+      {% filter heading(
+          heading_level,
+          role="type",
+          id=html_id,
+          class="doc doc-heading",
+          toc_label=(('<code class="doc-symbol doc-symbol-toc doc-symbol-type"></code>&nbsp;')|safe if config.show_symbol_type_toc else '') ~ (config.toc_label if config.toc_label and root else typedef.name),
+        ) %}
+        {% if config.show_symbol_type_heading %}<code class="doc-symbol doc-symbol-heading doc-symbol-type"></code>{% endif %}
+        {% if config.heading and root %}
+          {{ config.heading }}
+        {% elif config.show_signature and not config.separate_signature %}
+          {% filter highlight(language="luau", inline=True) %}{{ typedef.signature }}{% endfilter %}
+        {% else %}
+          <span class="doc doc-object-name doc-type-name">{{ display_name }}</span>
+        {% endif %}
+        {% with labels = typedef.labels %}
+          {% include "labels.html.jinja" with context %}
+        {% endwith %}
+      {% endfilter %}
+      {% if config.show_signature and config.separate_signature %}
+        <div class="doc-signature">
+          {% filter highlight(language="luau", inline=False) %}{{ typedef.signature }}{% endfilter %}
+        </div>
+      {% endif %}
+    {% else %}
+      {% if config.show_root_toc_entry %}
+        {% filter heading(
+            heading_level,
+            role="type",
+            id=html_id,
+            hidden=True,
+            toc_label=(('<code class="doc-symbol doc-symbol-toc doc-symbol-type"></code>&nbsp;')|safe if config.show_symbol_type_toc else '') ~ (config.toc_label if config.toc_label and root else typedef.name),
+          ) %}
+        {% endfilter %}
+      {% endif %}
+      {% set heading_level = heading_level - 1 %}
+    {% endif %}
+
+    <div class="doc doc-contents {% if root %}first{% endif %}">
+      {% include "deprecated.html.jinja" with context %}
+      {% include "description.html.jinja" with context %}
+      {% include "fields.html.jinja" with context %}
+      {% include "source.html.jinja" with context %}
+    </div>
+  {% endwith %}
+</div>

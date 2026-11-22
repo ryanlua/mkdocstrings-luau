@@ -1,0 +1,67 @@
+{#- Members of a class.
+
+Context:
+  class: Parent class.
+  members: Grouped visible members.
+  html_id (str): Parent anchor.
+  heading_level (int): Heading level for category titles.
+  root_members (bool)
+  config: Rendering options.
+-#}
+{% set extra = 1 if config.show_category_heading else 0 %}
+<div class="doc doc-children">
+  {% if members.properties %}
+    {% if config.show_category_heading %}
+      {% filter heading(heading_level, id=html_id ~ "-properties", skip_inventory=True) %}Properties{% endfilter %}
+    {% endif %}
+    {% for item in members.properties %}
+      {% with property = item, root = false, heading_level = heading_level + extra %}
+        {% include "property.html.jinja" with context %}
+      {% endwith %}
+    {% endfor %}
+  {% endif %}
+
+  {% if members.events %}
+    {% if config.show_category_heading %}
+      {% filter heading(heading_level, id=html_id ~ "-events", skip_inventory=True) %}Events{% endfilter %}
+    {% endif %}
+    {% for item in members.events %}
+      {% with property = item, member_symbol = "event", root = false, heading_level = heading_level + extra %}
+        {% include "property.html.jinja" with context %}
+      {% endwith %}
+    {% endfor %}
+  {% endif %}
+
+  {% if members.types %}
+    {% if config.show_category_heading %}
+      {% filter heading(heading_level, id=html_id ~ "-types", skip_inventory=True) %}Types{% endfilter %}
+    {% endif %}
+    {% for item in members.types %}
+      {% with typedef = item, root = false, heading_level = heading_level + extra %}
+        {% include "type.html.jinja" with context %}
+      {% endwith %}
+    {% endfor %}
+  {% endif %}
+
+  {% if members.functions %}
+    {% if config.show_category_heading %}
+      {% filter heading(heading_level, id=html_id ~ "-functions", skip_inventory=True) %}Functions{% endfilter %}
+    {% endif %}
+    {% for item in members.functions %}
+      {% with function = item, root = false, heading_level = heading_level + extra %}
+        {% include "function.html.jinja" with context %}
+      {% endwith %}
+    {% endfor %}
+  {% endif %}
+
+  {% if members.methods %}
+    {% if config.show_category_heading %}
+      {% filter heading(heading_level, id=html_id ~ "-methods", skip_inventory=True) %}Methods{% endfilter %}
+    {% endif %}
+    {% for item in members.methods %}
+      {% with function = item, root = false, heading_level = heading_level + extra %}
+        {% include "function.html.jinja" with context %}
+      {% endwith %}
+    {% endfor %}
+  {% endif %}
+</div>

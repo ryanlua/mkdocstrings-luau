@@ -1,0 +1,15 @@
+{#- Markdown description for a Luau object.
+
+Context:
+  obj: Documented object.
+  heading_level (int): Heading level for nested Markdown headings.
+  html_id (str): Anchor of the object, used to prefix nested ids.
+-#}
+{% if obj.description %}
+  <div class="doc doc-md-description">
+    {{ obj.description|moonwave_markdown(heading_level, html_id) }}
+  </div>
+{% endif %}
+{% if obj.since %}
+  <p class="doc doc-since"><span class="doc-section-title">Since:</span> <code>{{ obj.since }}</code></p>
+{% endif %}

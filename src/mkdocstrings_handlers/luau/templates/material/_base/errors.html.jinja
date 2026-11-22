@@ -1,0 +1,55 @@
+{#- Errors raised by a function.
+
+Context:
+  function: Function or method.
+  config: Rendering options.
+  heading_level (int)
+  html_id (str)
+-#}
+{% if function.errors %}
+  <p><span class="doc-section-title">Errors:</span></p>
+  {% if config.docstring_section_style == "list" %}
+    <ul>
+      {% for item in function.errors %}
+        <li class="doc-section-item">
+          {% if item.lua_type %}
+            <code>{% if config.signature_crossrefs %}{{ item.lua_type|lua_type(function.external_types) }}{% else %}{{ item.lua_type }}{% endif %}</code>
+          {% endif %}
+          {% if item.description %}
+            –
+            <div class="doc doc-md-description">
+              {{ item.description|moonwave_markdown(heading_level, html_id) }}
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>Error</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in function.errors %}
+          <tr class="doc-section-item">
+            <td>
+              {% if item.lua_type %}
+                <code>{% if config.signature_crossrefs %}{{ item.lua_type|lua_type(function.external_types) }}{% else %}{{ item.lua_type }}{% endif %}</code>
+              {% endif %}
+            </td>
+            <td>
+              {% if item.description %}
+                <div class="doc doc-md-description">
+                  {{ item.description|moonwave_markdown(heading_level, html_id) }}
+                </div>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endif %}
