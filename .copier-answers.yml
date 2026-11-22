@@ -1,0 +1,19 @@
+# Changes here will be overwritten by Copier.
+_commit: 1.6.1
+_src_path: gh:mkdocstrings/handler-template
+author_email: ryan.luu@ryanluu.dev
+author_fullname: Ryan Luu
+author_username: ryanlua
+copyright_date: '2026'
+copyright_holder: Ryan Luu
+copyright_holder_email: ryan.luu@ryanluu.dev
+copyright_license: ISC
+language: Luau
+project_description: A Luau handler for mkdocstrings.
+project_name: mkdocstrings-luau
+python_package_distribution_name: mkdocstrings-luau
+python_package_import_name: luau
+repository_name: mkdocstrings-luau
+repository_namespace: ryanlua
+repository_provider: github.com
+
