@@ -39,8 +39,6 @@ Documentation = "https://ryanlua.github.io/mkdocstrings-luau"
 Changelog = "https://ryanlua.github.io/mkdocstrings-luau/changelog"
 Repository = "https://github.com/ryanlua/mkdocstrings-luau"
 Issues = "https://github.com/ryanlua/mkdocstrings-luau/issues"
-Discussions = "https://github.com/ryanlua/mkdocstrings-luau/discussions"
-Gitter = "https://gitter.im/mkdocstrings-luau/community"
 Funding = "https://github.com/sponsors/ryanlua"
 
 [tool.pdm.version]
