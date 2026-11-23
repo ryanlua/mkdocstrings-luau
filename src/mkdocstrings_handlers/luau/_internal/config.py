@@ -2,21 +2,8 @@
 
 from __future__ import annotations
 
-import sys
 from dataclasses import field
-from typing import TYPE_CHECKING, Annotated, Any, Literal
-
-from mkdocstrings import get_logger
-
-# YORE: EOL 3.10: Replace block with line 2.
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
-
-
-_logger = get_logger(__name__)
-
+from typing import TYPE_CHECKING, Annotated, Any, Literal, Self
 
 try:
     # When Pydantic is available, use it to validate options (done automatically).
@@ -34,18 +21,6 @@ try:
 
     if getattr(pydantic, "__version__", "1.").startswith("1."):
         raise ImportError  # noqa: TRY301
-
-    # YORE: EOL 3.9: Remove block.
-    if sys.version_info < (3, 10):
-        try:
-            import eval_type_backport  # noqa: F401
-        except ImportError:
-            _logger.debug(
-                "Pydantic needs the `eval-type-backport` package to be installed "
-                "for modern type syntax to work on Python 3.9. "
-                "Deactivating Pydantic validation for Luau handler options.",
-            )
-            raise
 
     from inspect import cleandoc
 
@@ -83,15 +58,8 @@ if TYPE_CHECKING:
     from collections.abc import MutableMapping
 
 
-# YORE: EOL 3.9: Remove block.
-_dataclass_options = {"frozen": True}
-if sys.version_info >= (3, 10):
-    _dataclass_options["kw_only"] = True
-
-
 # The input config class is useful to generate a JSON schema, see scripts/mkdocs_hooks.py.
-# YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)  # type: ignore[call-overload]
+@dataclass(frozen=True, kw_only=True)
 class LuauInputOptions:
     """Accepted input options."""
 
@@ -335,8 +303,7 @@ class LuauInputOptions:
         return cls(**cls.coerce(**data))
 
 
-# YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)  # type: ignore[call-overload]
+@dataclass(frozen=True, kw_only=True)
 class LuauOptions(LuauInputOptions):  # type: ignore[override,unused-ignore]
     """Final options passed as template context."""
 
@@ -349,8 +316,7 @@ class LuauOptions(LuauInputOptions):  # type: ignore[override,unused-ignore]
         return super().coerce(**data)
 
 
-# YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)  # type: ignore[call-overload]
+@dataclass(frozen=True, kw_only=True)
 class _Inventory:
     """One remote objects inventory."""
 
@@ -365,8 +331,7 @@ class _Inventory:
 
 
 # The input config class is useful to generate a JSON schema, see scripts/mkdocs_hooks.py.
-# YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)  # type: ignore[call-overload]
+@dataclass(frozen=True, kw_only=True)
 class LuauInputConfig:
     """Luau handler configuration."""
 
@@ -412,8 +377,7 @@ class LuauInputConfig:
         return cls(**cls.coerce(**data))
 
 
-# YORE: EOL 3.9: Replace `**_dataclass_options` with `frozen=True, kw_only=True` within line.
-@dataclass(**_dataclass_options)  # type: ignore[call-overload]
+@dataclass(frozen=True, kw_only=True)
 class LuauConfig(LuauInputConfig):  # type: ignore[override,unused-ignore]
     """Luau handler configuration."""
 
