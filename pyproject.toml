@@ -104,7 +104,7 @@ ci = [
     "mkdocs-minify-plugin>=0.8",
     "mkdocs-section-index>=0.3",
     "mkdocstrings[python]>=1.0.8",
-    "pydantic>=2.10",
+    "pydantic>=2.12",
 ]
 
 [tool.uv]
