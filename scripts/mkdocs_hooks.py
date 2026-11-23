@@ -14,7 +14,7 @@ from mkdocstrings_handlers.luau._internal.config import LuauInputConfig, LuauInp
 try:
     from pydantic import TypeAdapter
 except ImportError:
-    TypeAdapter = None
+    TypeAdapter = None  # type: ignore[assignment,misc]
 
 
 _logger = get_plugin_logger(__name__)
@@ -38,9 +38,9 @@ def on_post_build(config: MkDocsConfig, **kwargs: Any) -> None:  # noqa: ARG001
         _logger.debug("Generated JSON schema")
 
     autorefs = config["plugins"]["autorefs"]
-    for field in fields(LuauInputConfig):  # type: ignore[arg-type]
+    for field in fields(LuauInputConfig):
         if f"setting-{field.name}" not in autorefs._primary_url_map:
             _logger.warning(f"Handler setting `{field.name}` is not documented")
-    for field in fields(LuauInputOptions):  # type: ignore[arg-type]
+    for field in fields(LuauInputOptions):
         if f"option-{field.name}" not in autorefs._primary_url_map:
             _logger.warning(f"Configuration option `{field.name}` is not documented")
