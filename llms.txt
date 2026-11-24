@@ -1,0 +1,12 @@
+# mkdocstrings-luau
+
+> A Luau handler for mkdocstrings.
+
+## Usage
+
+- [Overview](https://ryanlua.github.io/mkdocstrings-luau/index.md)
+
+## API
+
+- [API reference](https://ryanlua.github.io/mkdocstrings-luau/reference/api/index.md)
+
