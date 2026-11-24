@@ -22,14 +22,13 @@
 	},
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "make setup",
+	"postCreateCommand": "make setup && make vscode",
 
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
 			"extensions": [
 				"charliermarsh.ruff",
-				"ms-vscode.makefile-tools",
 				"ms-python.mypy-type-checker",
 				"ms-python.python"
 			]
