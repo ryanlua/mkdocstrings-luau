@@ -17,8 +17,12 @@
 
 A Luau handler for mkdocstrings.
 
+<!-- --8<-- [start:install] -->
+
 ## Installation
 
 ```bash
 pip install mkdocstrings-luau
 ```
+
+<!-- --8<-- [end:install] -->

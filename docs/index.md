@@ -9,3 +9,5 @@ title: Overview
 !!! note
 
     Currently, either [Material for MkDocs](https://github.com/squidfunk/mkdocs-material) or [Zensical](https://zensical.org/docs/get-started/) is supported
+
+--8<-- "README.md:install"
