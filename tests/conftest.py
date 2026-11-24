@@ -163,7 +163,10 @@ def _write_fixture(tmp_path: Path) -> None:
                     "name": "Changed",
                     "desc": "Fires when it opens.",
                     "lua_type": "BindableEvent",
-                    "source": {"line": lines.index('Box.Changed = Create("BindableEvent")({') + 1, "path": "src/init.luau"},
+                    "source": {
+                        "line": lines.index('Box.Changed = Create("BindableEvent")({') + 1,
+                        "path": "src/init.luau",
+                    },
                 },
             ],
             "types": [

@@ -100,9 +100,7 @@ def _fixture_inventory() -> Inventory:
 def test_exposed_objects(modulelevel_internal_objects: list[griffe.Object | griffe.Alias]) -> None:
     """All public objects in the internal API are exposed under `mkdocstrings_handlers.luau`."""
     not_exposed = [
-        obj.path
-        for obj in modulelevel_internal_objects
-        if obj.name not in luau.__all__ or not hasattr(luau, obj.name)
+        obj.path for obj in modulelevel_internal_objects if obj.name not in luau.__all__ or not hasattr(luau, obj.name)
     ]
     assert not not_exposed, "Objects not exposed:\n" + "\n".join(sorted(not_exposed))
 
@@ -163,11 +161,7 @@ def test_inventory_matches_api(
     public_api_paths.add("mkdocstrings_handlers")
     public_api_paths.add("mkdocstrings_handlers.luau")
     for item in inventory.values():
-        if (
-            item.domain == "py"
-            and "(" not in item.name
-            and _module_or_child("mkdocstrings_handlers.luau", item.name)
-        ):
+        if item.domain == "py" and "(" not in item.name and _module_or_child("mkdocstrings_handlers.luau", item.name):
             obj = loader.modules_collection[item.name]
             if obj.path not in public_api_paths and not any(path in public_api_paths for path in obj.aliases):
                 not_in_api.append(item.name)
