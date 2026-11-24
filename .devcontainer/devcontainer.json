@@ -16,7 +16,8 @@
 	"forwardPorts": [8000],
 	"portsAttributes": {
 		"8000": {
-			"label": "MkDocs"
+			"label": "MkDocs",
+			"onAutoForward": "openPreview"
 		}
 	},
 
