@@ -37,6 +37,7 @@ nav:
 theme:
   name: material
   custom_dir: docs/.overrides
+  logo: logo.svg
   features:
   - announce.dismiss
   - content.action.edit
@@ -102,7 +103,7 @@ markdown_extensions:
 - pymdownx.tasklist:
     custom_checkbox: true
 - toc:
-    permalink: true
+    permalink: "¤"
 
 plugins:
 - search
