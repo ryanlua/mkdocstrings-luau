@@ -2,8 +2,8 @@
 name: Documentation update
 about: Point at unclear, missing or outdated documentation.
 title: "docs: "
-labels: docs
-assignees: pawamoy
+labels: documentation
+type: task
 ---
 
 ### Is something unclear, missing or outdated in our documentation?

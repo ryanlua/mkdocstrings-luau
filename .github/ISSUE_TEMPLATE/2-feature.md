@@ -2,8 +2,8 @@
 name: Feature request
 about: Suggest an idea for this project.
 title: "feature: "
-labels: feature
-assignees: pawamoy
+labels: enhancement
+type: feature
 ---
 
 ### Is your feature request related to a problem? Please describe.
