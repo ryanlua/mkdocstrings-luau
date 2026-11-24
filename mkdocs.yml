@@ -155,8 +155,6 @@ plugins:
 extra:
   social:
   - icon: fontawesome/brands/github
-    link: https://github.com/ryanlua
-  - icon: fontawesome/brands/gitter
-    link: https://gitter.im/mkdocstrings-luau/community
+    link: https://github.com/ryanlua/mkdocstrings-luau
   - icon: fontawesome/brands/python
     link: https://pypi.org/project/mkdocstrings-luau/
